@@ -3,16 +3,16 @@ import { ClientRouter } from "astro:transitions";
 import "@/styles/global.css";
 import Navbar from "@/components/Navbar.astro";
 import Footer from "@/components/Footer.astro";
+import type { Settings } from "@/types";
 
 interface Props {
-  title?: string;
-  description?: string;
+  settings?: Settings;
 }
 
-const { 
-	title = "Fluydo S.A",
-	description = "Empresa Argentina líder en importación de Marroquinería y Accesorios de Moda"
-} = Astro.props;
+const { settings } = Astro.props;
+const title = settings?.businessTitle || "Fluydo S.A.";
+const description = settings?.businessPresentation || "";
+
 ---
 
 <!doctype html>
@@ -20,7 +20,7 @@ const {
   <head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
-		<title>{title}</title>
+		<title>{settings?.businessTitle}</title>
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
 		<meta name="description" content={description} />

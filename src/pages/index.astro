@@ -12,9 +12,9 @@ console.log(settings);
 
 ---
 
-<Layout title="Fluydo S.A - Importadores de Marroquinería y Accesorios de Moda">
+<Layout settings={settings}>
   <main>
-    <Hero businessTitle={settings.businessTitle} />
+    <Hero businessTitle={settings.businessTitle} businessPresentation={settings.businessPresentation} />
     <AboutSection aboutUs={settings.aboutUs} />
     <PurchaseConditions />
     <HistorySection />

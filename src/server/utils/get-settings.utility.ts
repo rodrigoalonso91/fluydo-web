@@ -1,3 +1,4 @@
+import type { Settings } from "@/types";
 import { BackofficeService } from "../services";
 
 export async function getSettings(): Promise<Settings> {
@@ -14,17 +15,6 @@ export async function getSettings(): Promise<Settings> {
     email: settings?.email,
     logoId: settings?.logo,
   };
-}
-
-interface Settings {
-  businessTitle: string;
-  businessPresentation: string;
-  aboutUs: string;
-  businessAddress: string;
-  businessTimeOpen: string;
-  phone: string;
-  email: string;
-  logoId: string;
 }
 
 const emptySettings: Settings = {
