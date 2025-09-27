@@ -5,12 +5,17 @@ import AboutSection from '../components/AboutSection.astro';
 import PurchaseConditions from '../components/PurchaseConditions.astro';
 import HistorySection from '../components/HistorySection.astro';
 import ContactSection from '../components/ContactSection.astro';
+import { getSettings } from '@/server/utils';
+
+const settings = await getSettings();
+console.log(settings);
+
 ---
 
 <Layout title="Fluydo S.A - Importadores de Marroquinería y Accesorios de Moda">
   <main>
-    <Hero />
-    <AboutSection />
+    <Hero businessTitle={settings.businessTitle} />
+    <AboutSection aboutUs={settings.aboutUs} />
     <PurchaseConditions />
     <HistorySection />
     <!-- <ContactSection /> -->

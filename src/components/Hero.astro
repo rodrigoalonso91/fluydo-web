@@ -7,7 +7,9 @@ import product4 from '@/assets/images/carrousel/product-4.png';
 import PrimaryLinkButton from './PrimaryLinkButton.astro';
 
 interface Props {
-  images?: string[];
+  carrouselImages?: string[];
+  businessTitle?: string;
+  businessPresentation?: string;
 }
 
 const images = [
@@ -16,6 +18,15 @@ const images = [
   product3,
   product4,
 ];
+
+const { businessTitle, businessPresentation, carrouselImages } = Astro.props;
+console.log({ carrouselImages });
+
+const fallbackBusinessTitle = "Fluydo S.A";
+const fallbackBusinessPresentation = "Empresa Argentina especializada en importación de marroquinería y accesorios de moda";
+const title = businessTitle || fallbackBusinessTitle;
+const presentation = businessPresentation || fallbackBusinessPresentation;
+
 ---
 
 <section class="bg-primary text-secondary">
@@ -23,9 +34,9 @@ const images = [
     <div class="max-w-6xl mx-auto">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
         <div class="text-center lg:text-left">
-          <h1 class="text-4xl md:text-5xl font-bold mb-6">Fluydo S.A</h1>
+          <h1 class="text-4xl md:text-5xl font-bold mb-6">{ title }</h1>
           <p class="text-xl mb-8">
-            Empresa Argentina especializada en importación de marroquinería y accesorios de moda
+            { presentation }
           </p>
           <div class="flex flex-col sm:flex-row justify-center lg:justify-start gap-4">
             <PrimaryLinkButton href='/contacto'>
