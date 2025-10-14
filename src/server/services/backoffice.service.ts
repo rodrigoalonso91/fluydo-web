@@ -1,4 +1,5 @@
-import { createDirectus, isDirectusError, readItem, rest, staticToken, type Query } from "@directus/sdk";
+import type { BuyConditionEntity, SettingEntity } from "@/types";
+import { createDirectus, isDirectusError, readItem, readItems, rest, staticToken, type Query } from "@directus/sdk";
 import { getSecret } from "astro:env/server";
 
 const backofficeToken = getSecret("DIRECTUS_ADMIN_APIKEY");
@@ -10,21 +11,8 @@ if (!backofficeToken || !backofficeUrl) {
 }
 
 interface DirectusSchema {
-  settings: SettingEntity[]
-}
-
-interface SettingEntity {
-  id: string;
-  business_title: string;
-  business_presentation: string;
-  about_us: string;
-  user_updated: string;
-  date_updated: string;
-  business_address: string;
-  business_time_open: string;
-  phone: string;
-  email: string;
-  logo: string;
+  settings: SettingEntity[];
+  buy_conditions: BuyConditionEntity[];
 }
 
 const client = createDirectus<DirectusSchema>(backofficeUrl).with(rest()).with(staticToken(backofficeToken));
@@ -34,6 +22,21 @@ export class BackofficeService {
     try {
       const settings = await client.request(readItem("settings", settingsId, query));
       return settings;
+    }
+    catch (error) {
+      if (isDirectusError(error)) {
+        console.error(error.message);
+      }
+      else {
+        console.error(error);
+      }
+    }
+  }
+
+  static async getBuyConditions(query?: Query<DirectusSchema, BuyConditionEntity>) {
+    try {
+      const buyConditions = await client.request(readItems("buy_conditions", query));
+      return buyConditions;
     }
     catch (error) {
       if (isDirectusError(error)) {
