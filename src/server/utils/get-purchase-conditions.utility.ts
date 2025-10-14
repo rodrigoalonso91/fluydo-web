@@ -1,8 +1,8 @@
-import type { BuyCondition } from "@/types";
+import type { PurchaseCondition } from "@/types";
 import { BackofficeService } from "../services";
 
-export async function getBuyConditions(): Promise<BuyCondition[]> {
-  const response = await BackofficeService.getBuyConditions({
+export async function getPurchaseConditions(): Promise<PurchaseCondition[]> {
+  const response = await BackofficeService.getPurchaseConditions({
     filter: {
       status: {
         _eq: "published"

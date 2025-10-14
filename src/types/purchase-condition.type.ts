@@ -1,4 +1,4 @@
-export interface BuyConditionEntity {
+export interface PurchaseConditionEntity {
   id: string;
   status: string;
   sort: number | null;
@@ -10,7 +10,7 @@ export interface BuyConditionEntity {
   description: string;
 }
 
-export interface BuyCondition {
+export interface PurchaseCondition {
   id: string;
   title: string;
   description: string;

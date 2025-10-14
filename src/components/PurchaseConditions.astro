@@ -1,19 +1,7 @@
 ---
+import { getPurchaseConditions } from "@/server/utils";
 
-const purchaseConditions = [
-  {
-    title: "COMPRA MÍNIMA",
-    description: "El monto mínimo actual de compra es de $1.500.000 + IVA"
-  },
-  {
-    title: "VENTA POR BULTO",
-    description: "Venta por 12 colores surtidos"
-  },
-  {
-    title: "PAGO",
-    description: "Pago a pactar"
-  }
-]
+const purchaseConditions = await getPurchaseConditions();
 
 ---
 
