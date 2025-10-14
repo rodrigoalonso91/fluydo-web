@@ -1,4 +1,4 @@
-import { createDirectus, isDirectusError, readItem, readItems, rest, staticToken } from "@directus/sdk";
+import { createDirectus, isDirectusError, readItem, rest, staticToken, type Query } from "@directus/sdk";
 import { getSecret } from "astro:env/server";
 
 const backofficeToken = getSecret("DIRECTUS_ADMIN_APIKEY");
@@ -30,11 +30,9 @@ interface SettingEntity {
 const client = createDirectus<DirectusSchema>(backofficeUrl).with(rest()).with(staticToken(backofficeToken));
 
 export class BackofficeService {
-
-
-  static async getSettings() {
+  static async getSettings(query?: Query<DirectusSchema, SettingEntity>) {
     try {
-      const settings = await client.request(readItem("settings", settingsId));
+      const settings = await client.request(readItem("settings", settingsId, query));
       return settings;
     }
     catch (error) {
