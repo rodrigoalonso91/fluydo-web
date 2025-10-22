@@ -31,6 +31,10 @@ services:
       SECRET: ${DIRECTUS_SECRET}
       ADMIN_EMAIL: ${DIRECTUS_ADMIN_EMAIL}
       ADMIN_PASSWORD: ${DIRECTUS_ADMIN_PASSWORD}
+      PUBLIC_URL: "http://31.97.91.146:8056"
+      CORS_ENABLED: "true"
+      CORS_ORIGIN: "https://fluydo.netlify.app,http://31.97.91.146:8056"
+      CORS_CREDENTIALS: "true"
     volumes:
       - directus_uploads:/directus/uploads
       - directus_extensions:/directus/extensions

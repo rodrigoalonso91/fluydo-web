@@ -1,13 +1,12 @@
 import { BackofficeService } from "../services";
-import { getSecret } from "astro:env/server";
 
 export async function getLogo(): Promise<string> {
   const response = await BackofficeService.getSettings({ fields: ['logo'] });
-  const backofficeUrl = getSecret("DIRECTUS_BO_URL");
   
-  if (!response?.logo || !backofficeUrl) {
+  if (!response?.logo) {
     return "";
   }
   
-  return `${backofficeUrl}/assets/${response.logo}`;
+  // Use local proxy to avoid mixed-content issues (HTTPS site loading HTTP images)
+  return `/api/image/${response.logo}`;
 }
