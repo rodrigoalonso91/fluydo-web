@@ -1,0 +1,3 @@
+[images]
+  # Permitir cualquier ruta en tu VPS
+  remote_images = ["http://31\\.97\\.91\\.146/.*"]
