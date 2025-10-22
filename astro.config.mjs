@@ -2,6 +2,7 @@
 import { defineConfig, envField } from 'astro/config';
 import tailwindcss from "@tailwindcss/vite";
 import path from 'path';
+import netlify from "@astrojs/netlify";
 
 // https://astro.build/config
 export default defineConfig({
@@ -12,6 +13,7 @@ export default defineConfig({
       DIRECTUS_SETTINGS_ID: envField.string({ context: "server", access: "secret", default: "" })
     }
   },
+
   vite: {
     plugins: [tailwindcss()],
     resolve: {
@@ -19,5 +21,7 @@ export default defineConfig({
         '@': path.resolve('./src')
       }
     }
-  }
+  },
+  output: 'server',
+  adapter: netlify()
 });
