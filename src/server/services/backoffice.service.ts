@@ -12,7 +12,7 @@ if (!backofficeToken || !backofficeUrl) {
 
 interface DirectusSchema {
   settings: SettingEntity[];
-  buy_conditions: PurchaseConditionEntity[];
+  purchase_conditions: PurchaseConditionEntity[];
 }
 
 const client = createDirectus<DirectusSchema>(backofficeUrl).with(rest()).with(staticToken(backofficeToken));
@@ -35,7 +35,7 @@ export class BackofficeService {
 
   static async getPurchaseConditions(query?: Query<DirectusSchema, PurchaseConditionEntity>) {
     try {
-      const purchaseConditions = await client.request(readItems("buy_conditions", query));
+      const purchaseConditions = await client.request(readItems("purchase_conditions", query));
       return purchaseConditions;
     }
     catch (error) {
