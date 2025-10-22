@@ -9,7 +9,7 @@ export default defineConfig({
   env: {
     schema: {
       DIRECTUS_ADMIN_APIKEY: envField.string({ context: "server", access: "secret" }),
-      DIRECTUS_BO_URL: envField.string({ context: "server", access: "public" }),
+      DIRECTUS_BO_URL: envField.string({ context: "server", access: "secret" }),
       DIRECTUS_SETTINGS_ID: envField.string({ context: "server", access: "secret", default: "" })
     }
   },

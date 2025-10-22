@@ -1,9 +1,6 @@
 ---
 import { getLogo } from "@/server/utils";
-import { DIRECTUS_BO_URL } from "astro:env/server";
-
-const logo = await getLogo();
-const logoUrl = logo ? `${DIRECTUS_BO_URL}/assets/${logo}` : "";
+const logoUrl = await getLogo();
 ---
 
 <img src={logoUrl} alt="Logo" class="w-fit h-14" />
