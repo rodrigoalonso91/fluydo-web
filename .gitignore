@@ -26,3 +26,6 @@ pnpm-debug.log*
 # docker database volume
 db-data/
 .env.local
+
+# Local Netlify folder
+.netlify
