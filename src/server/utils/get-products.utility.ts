@@ -20,7 +20,18 @@ export async function getProducts(): Promise<Product[]> {
     ] as any
   });
   if (!products) return [];
-  return products;
+
+  const productsWithColors = products.map(product => {
+    return {
+      ...product,
+      colors: product.colors?.map(color => ({
+        id: color.id,
+        name: color.name,
+        code: color.code
+      })) || []
+    }
+  });
+  return productsWithColors;
 }
 
 
