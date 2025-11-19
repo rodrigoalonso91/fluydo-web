@@ -1,0 +1,57 @@
+---
+interface Props {
+  title: string;
+  description: string;
+  price: number;
+  images: string[];
+  href?: string;
+}
+
+const { title, description, price, images, href = '#' } = Astro.props;
+
+const formattedPrice = new Intl.NumberFormat('es-AR', {
+  style: 'currency',
+  currency: 'ARS',
+  minimumFractionDigits: 0,
+  maximumFractionDigits: 0,
+}).format(price);
+---
+
+<a href={href} class="group flex flex-col bg-secondary border border-gray-100 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden h-full">
+  <div class="relative aspect-[4/5] overflow-hidden bg-gray-50">
+    {images && images.length > 0 ? (
+      <img
+        src={images[0]}
+        alt={title}
+        class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 ease-out"
+        loading="lazy"
+      />
+    ) : (
+      <div class="flex items-center justify-center w-full h-full text-gray-300 bg-gray-50">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-12 h-12">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+        </svg>
+      </div>
+    )}
+  </div>
+
+  <div class="p-5 flex flex-col flex-grow">
+    <div class="mb-2">
+      <h3 class="font-semibold text-lg text-primary leading-tight mb-1 group-hover:text-gray-600 transition-colors">
+        {title}
+      </h3>
+      <p class="text-gray-500 text-sm line-clamp-2 h-10">
+        {description}
+      </p>
+    </div>
+
+    <div class="mt-auto pt-4 flex items-center justify-between border-t border-gray-50">
+      <span class="text-xl font-bold text-primary">
+        {formattedPrice}
+      </span>
+      <span class="text-sm font-medium text-primary opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0 transition-all duration-300">
+        Ver producto &rarr;
+      </span>
+    </div>
+  </div>
+</a>
