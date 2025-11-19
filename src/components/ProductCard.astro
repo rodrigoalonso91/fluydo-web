@@ -1,57 +1,83 @@
 ---
+import type { Product } from '@/types';
+// import RenderIf from './RenderIf.astro';
+import { getSecret } from 'astro:env/server';
+import ColorSelector from './ColorSelector.astro';
+
+const backofficeUrl = getSecret("DIRECTUS_BO_URL");
+
+
+// const product = {
+//   id: "prod-001",
+//   title: "Sony WH-1000XM5 Noise Canceling",
+//   description: "Sumérgete en el sonido con la cancelación de ruido líder en la industria y un diseño ultraligero.",
+//   price: 349.00,
+//   originalPrice: 419.99,
+//   currency: "$",
+//   image: "https://images.unsplash.com/photo-1618366712010-f4ae9c647dcb?q=80&w=1000&auto=format&fit=crop",
+//   badge: "Oferta",
+//   colors: [
+//     { name: "Midnight Black", hex: "#1a1a1a", twClass: "bg-neutral-900" },
+//     { name: "Silver", hex: "#e0e0e0", twClass: "bg-gray-200" },
+//     { name: "Navy Blue", hex: "#1e3a8a", twClass: "bg-blue-900" }
+//   ],
+//   rating: 4.8
+// };
+
 interface Props {
-  title: string;
-  description: string;
-  price: number;
-  images: string[];
-  href?: string;
+  product: Product;
 }
 
-const { title, description, price, images, href = '#' } = Astro.props;
+const { product } = Astro.props;
+const discount = Math.round(((product.price - product.price) / product.price) * 100);
 
-const formattedPrice = new Intl.NumberFormat('es-AR', {
-  style: 'currency',
-  currency: 'ARS',
-  minimumFractionDigits: 0,
-  maximumFractionDigits: 0,
-}).format(price);
 ---
 
-<a href={href} class="group flex flex-col bg-secondary border border-gray-100 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden h-full">
-  <div class="relative aspect-[4/5] overflow-hidden bg-gray-50">
-    {images && images.length > 0 ? (
-      <img
-        src={images[0]}
-        alt={title}
-        class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 ease-out"
-        loading="lazy"
-      />
-    ) : (
-      <div class="flex items-center justify-center w-full h-full text-gray-300 bg-gray-50">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-12 h-12">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
-        </svg>
+<article class="group relative flex flex-col w-full max-w-[380px] bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 ease-out overflow-hidden mx-auto sm:mx-0">
+  
+  <div class="relative w-full aspect-[4/3] overflow-hidden bg-gray-100">
+
+    <!-- <RenderIf condition={!!product.badge}>
+      <span class="absolute top-3 left-3 z-10 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-sm">
+        {product.badge} -{discount}%
+      </span>
+    </RenderIf> -->
+    
+    <img
+      src={`${backofficeUrl}/assets/${product.images[0].directus_files_id}`}
+      alt={`Imagen de ${product.name}`} 
+      class="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+      loading="lazy"
+    />
+  </div>
+
+  <div class="flex flex-col flex-grow p-6 gap-3">
+    
+    <div class="flex justify-between items-start gap-4">
+      <h2 class="text-lg font-bold leading-snug text-gray-900">
+        <a href={`/product/${product.id}`} class="hover:text-indigo-600 transition-colors">
+          {product.name}
+        </a>
+      </h2>
+    </div>
+
+    <p class="text-sm text-gray-500 line-clamp-2 leading-relaxed">
+      {product.description}
+    </p>
+
+    <ColorSelector productId={product.id} colors={product.colors} />
+
+    <!-- Footer: Precio y Botón -->
+    <div class="flex items-center justify-end mt-3 pt-4 border-t border-gray-100">
+      <div class="flex flex-col">
+        <span class="text-xl font-extrabold text-gray-900">
+          $ {product.price} ARS
+        </span>
       </div>
-    )}
-  </div>
-
-  <div class="p-5 flex flex-col flex-grow">
-    <div class="mb-2">
-      <h3 class="font-semibold text-lg text-primary leading-tight mb-1 group-hover:text-gray-600 transition-colors">
-        {title}
-      </h3>
-      <p class="text-gray-500 text-sm line-clamp-2 h-10">
-        {description}
-      </p>
-    </div>
-
-    <div class="mt-auto pt-4 flex items-center justify-between border-t border-gray-50">
-      <span class="text-xl font-bold text-primary">
-        {formattedPrice}
-      </span>
-      <span class="text-sm font-medium text-primary opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0 transition-all duration-300">
-        Ver producto &rarr;
-      </span>
+      
+      <!-- <button class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-lg shadow-sm hover:shadow transition-all duration-200 active:scale-95">
+        Añadir +
+      </button> -->
     </div>
   </div>
-</a>
+</article>

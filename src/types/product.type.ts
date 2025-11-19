@@ -12,7 +12,7 @@ export interface ProductEntity {
   price: number;
   description: string;
   images: ProductImage[];
-  colors: ColorEntity[];
+  colors: Array<{ colors_id: ColorEntity }>;
   sku: string;
 }
 

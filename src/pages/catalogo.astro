@@ -4,8 +4,8 @@ import { getProducts } from "@/server/utils";
 import { getSecret } from "astro:env/server";
 import NoAvaliableProducts from "@/components/NoAvaliableProducts.astro";
 import If from "@/components/If.astro";
+import ProductCard from "@/components/ProductCard.astro";
 
-const backofficeUrl = getSecret("DIRECTUS_BO_URL");
 const products = await getProducts();
 ---
 
@@ -46,7 +46,7 @@ const products = await getProducts();
       <div slot="else" class="grid gap-8 lg:grid-cols-[260px,1fr]">
         <aside class="space-y-6 border-gray-200 lg:border-r lg:pr-6">
           
-          <section class="space-y-3">
+          <!-- <section class="space-y-3">
             <h2 class="text-sm font-semibold uppercase tracking-wide text-gray-700">
               Categorías
             </h2>
@@ -56,9 +56,9 @@ const products = await getProducts();
               <button class="block w-full text-left hover:text-gray-900">Mochilas</button>
               <button class="block w-full text-left hover:text-gray-900">Billeteras</button>
             </div>
-          </section>
+          </section> -->
 
-          <section class="space-y-3">
+          <!-- <section class="space-y-3">
             <h2 class="text-sm font-semibold uppercase tracking-wide text-gray-700">
               Rango de precio
             </h2>
@@ -75,9 +75,9 @@ const products = await getProducts();
                 class="w-full rounded border border-gray-300 px-2 py-1 text-sm focus:border-gray-400 focus:outline-none"
               />
             </div>
-          </section>
+          </section> -->
 
-          <section class="space-y-3">
+          <!-- <section class="space-y-3">
             <h2 class="text-sm font-semibold uppercase tracking-wide text-gray-700">
               Colores
             </h2>
@@ -87,7 +87,7 @@ const products = await getProducts();
               <button class="h-7 w-7 rounded-full border border-gray-300 bg-red-700" aria-label="Rojo" />
               <button class="h-7 w-7 rounded-full border border-gray-300 bg-gray-300" aria-label="Gris" />
             </div>
-          </section>
+          </section> -->
         </aside>
 
         <section class="space-y-4">
@@ -96,38 +96,10 @@ const products = await getProducts();
               const mainImage = product.images[0];
 
               return (
-                <article
-                  class="group flex flex-col overflow-hidden rounded border border-gray-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
-                >
-                  <div class="relative aspect-[4/5] w-full bg-gray-100">
-                    {mainImage ? (
-                      <img
-                        loading="lazy"
-                        src={`${backofficeUrl}/assets/${mainImage.directus_files_id}`}
-                        alt={product.name}
-                        class="h-full w-full object-cover transition duration-200 group-hover:scale-[1.03]"
-                      />
-                    ) : (
-                      <div class="flex h-full w-full items-center justify-center text-xs text-gray-400">
-                        Sin imagen
-                      </div>
-                    )}
-                  </div>
-
-                  <div class="flex flex-1 flex-col gap-1 px-3 py-3">
-                    <h3 class="line-clamp-2 text-sm font-medium text-gray-900">
-                      {product.name}
-                    </h3>
-                    <p class="text-xs uppercase tracking-wide text-gray-400">SKU {product.sku}</p>
-                    <p class="mt-1 text-base font-semibold text-gray-900">
-                      ${product.price.toLocaleString("es-AR", { minimumFractionDigits: 0 })}
-                    </p>
-                    <button class="mt-2 inline-flex items-center justify-center rounded bg-gray-900 px-3 py-1.5 text-xs font-medium uppercase tracking-wide text-white transition hover:bg-black">
-                      Ver detalle
-                    </button>
-                  </div>
-                </article>
-              );
+                <ProductCard
+                  product={product}
+                />
+              )
             })}
           </div>
         </section>

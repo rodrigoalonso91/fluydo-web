@@ -1,19 +1,14 @@
 ---
 interface Props {
   of: any[];
-  renderAs: (item: any, index: number) => any;
+  render: any; // Recibe un Componente Astro
 }
 
-const { of = [], renderAs } = Astro.props;
-
-if (!Array.isArray(of)) {
-  throw new Error('Each component: "of" prop must be an array');
-}
-if (typeof renderAs !== 'function') {
-  throw new Error('Each component: "renderAs" prop must be a function');
-}
+const { of, render: Component } = Astro.props;
 ---
 
 {
-  of.map((item, index) => renderAs(item, index))
+  of.map((item, index) => (
+    <Component item={item} index={index} />
+  ))
 }
