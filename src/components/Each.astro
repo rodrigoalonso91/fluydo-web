@@ -1,0 +1,12 @@
+---
+interface Props {
+  of: any[];
+  renderAs: (item: any, index: number) => any;
+}
+
+const { of, renderAs } = Astro.props;
+---
+
+{
+  of.map((item, index) => renderAs(item, index))
+}
