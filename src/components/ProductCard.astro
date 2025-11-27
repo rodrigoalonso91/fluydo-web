@@ -1,10 +1,7 @@
 ---
 import type { Product } from '@/types';
 // import RenderIf from './RenderIf.astro';
-import { getSecret } from 'astro:env/server';
 import ColorSelector from './ColorSelector.astro';
-
-const backofficeUrl = getSecret("DIRECTUS_BO_URL");
 
 
 // const product = {
@@ -44,8 +41,8 @@ const discount = Math.round(((product.price - product.price) / product.price) * 
     </RenderIf> -->
     
     <img
-      src={`${backofficeUrl}/assets/${product.images[0].directus_files_id}`}
-      alt={`Imagen de ${product.name}`} 
+      src={`/api/image/${product.images[0].directus_files_id}`}
+      alt={`Imagen de ${product.name}`}
       class="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
       loading="lazy"
     />
