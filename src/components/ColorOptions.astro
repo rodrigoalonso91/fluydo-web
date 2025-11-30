@@ -2,24 +2,16 @@
 import type { Color } from '@/types';
 
 interface Props {
-  productId: string;
   colors: Color[];
 }
 
-const { productId, colors } = Astro.props;
+const { colors } = Astro.props;
 ---
 <div class="mt-auto pt-2 flex items-center gap-3">
   <span class="text-xs font-bold text-gray-400 uppercase tracking-wider">Colores:</span>
   <div class="flex gap-2">
     {colors.map((color, index) => (
-      <label class="relative cursor-pointer group/color">
-        <input 
-          type="radio" 
-          name={`color-${productId}`} 
-          value={color.name} 
-          checked={index === 0}
-          class="peer sr-only" 
-        />
+      <label class="relative group/color">
         <span 
           class="block w-5 h-5 rounded-full border border-gray-200 ring-offset-1 transition-all duration-200 peer-checked:ring-2 peer-checked:ring-indigo-600 peer-checked:scale-110 peer-focus-visible:ring-2"
           style={`background-color: ${color.code};`}

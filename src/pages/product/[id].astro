@@ -1,7 +1,8 @@
 ---
 import Layout from "@/layouts/Layout.astro";
 import { getProduct } from "@/server/utils";
-import ColorSelector from "@/components/ColorSelector.astro";
+import ColorOptions from "@/components/ColorOptions.astro";
+import If from "@/components/If.astro";
 
 const { id } = Astro.params;
 const product = id ? await getProduct(id) : null;
@@ -130,12 +131,10 @@ const secondaryImages = product?.images?.slice(1) ?? [];
               ) : (
                 <p class="text-sm text-slate-500">Próximamente más variantes de color.</p>
               )}
-
-              <ColorSelector productId={product.id} colors={product.colors} />
             </div>
 
             <div class="grid gap-3 sm:grid-cols-2">
-              <button class="inline-flex items-center justify-center gap-2 rounded-2xl bg-indigo-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-indigo-200 transition hover:-translate-y-0.5 hover:bg-indigo-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+              <button class="inline-flex items-center justify-center gap-2 rounded-2xl bg-indigo-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-indigo-200 transition hover:-translate-y-0.5 hover:bg-indigo-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
                 Añadir al carrito
               </button>
               <button class="inline-flex items-center justify-center gap-2 rounded-2xl border border-slate-200 px-5 py-3 text-sm font-semibold text-slate-800 shadow-sm transition hover:-translate-y-0.5 hover:border-indigo-200 hover:text-indigo-700 hover:shadow-md">

@@ -92,15 +92,11 @@ const products = await getProducts();
 
         <section class="space-y-4">
           <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {products.map((product) => {
-              const mainImage = product.images[0];
-
-              return (
-                <ProductCard
-                  product={product}
-                />
-              )
-            })}
+            {products.filter(product => !!product).map((product) => (
+              <a class="contents" href={`/product/${product.id}`}>
+                <ProductCard product={product} />
+              </a>
+            ))}
           </div>
         </section>
       </div>
