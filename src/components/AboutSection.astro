@@ -1,31 +1,33 @@
 ---
+import RenderIf from "./RenderIf.astro";
 import SecondaryLinkButton from "./SecondaryLinkButton.astro";
 
 interface Props {
   aboutUs?: string;
+  phoneNumber?: string;
 }
 
-const { aboutUs } = Astro.props;
+const { aboutUs, phoneNumber } = Astro.props;
 
-const whatsappLink = "https://wa.me/0000000000";
+const whatsappLink = `https://wa.me/${phoneNumber}`;
 ---
 
 <section id="quienes-somos" class="py-16 bg-secondary text-primary">
   <div class="container mx-auto px-4">
     <div class="max-w-4xl mx-auto">
-      {
-        aboutUs && (
-          <h2 class="text-3xl font-bold text-center mb-12">QUIENES SOMOS</h2>
+      <RenderIf condition={!!aboutUs}>
+        <h2 class="text-3xl font-bold text-center mb-12">QUIENES SOMOS</h2>
           <div class="prose prose-lg mx-auto">
             <p set:html={aboutUs} class="text-lg leading-relaxed"></p>
           </div>
-          <div class="mt-10 text-center">
+          <RenderIf condition={!!phoneNumber}>
+            <div class="mt-10 text-center">
             <SecondaryLinkButton href={whatsappLink} target="_blank" rel="noopener noreferrer">
               QUIERO COMPRAR
             </SecondaryLinkButton>
           </div>
-        )
-      }
+          </RenderIf>
+      </RenderIf>
     </div>
   </div>
 </section>
