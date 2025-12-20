@@ -4,7 +4,6 @@ import Hero from '../components/Hero.astro';
 import AboutSection from '../components/AboutSection.astro';
 import PurchaseConditions from '../components/PurchaseConditions.astro';
 import HistorySection from '../components/HistorySection.astro';
-import ContactSection from '../components/ContactSection.astro';
 import { getSettings } from '@/server/utils';
 
 const settings = await getSettings();
@@ -17,6 +16,5 @@ const settings = await getSettings();
     <AboutSection aboutUs={settings.aboutUs} />
     <PurchaseConditions />
     <HistorySection />
-    <!-- <ContactSection /> -->
   </main>
 </Layout>

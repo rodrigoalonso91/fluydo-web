@@ -1,11 +1,18 @@
 ---
 interface Props {
   href: string;
+  target?: string;
+  rel?: string;
 }
 
-const { href } = Astro.props;
+const { href, target, rel } = Astro.props;
 ---
 
-<a href={href} class="bg-primary text-secondary font-medium py-3 px-6 rounded-lg transition-colors shadow-md">
+<a
+  href={href}
+  target={target}
+  rel={rel}
+  class="bg-primary text-secondary font-medium py-3 px-6 rounded-lg transition-colors shadow-md"
+>
   <slot />
 </a>
