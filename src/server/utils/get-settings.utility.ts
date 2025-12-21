@@ -1,17 +1,17 @@
 import type { Settings } from "@/types";
 import { BackofficeService } from "../services";
+import { normalizeProduct } from "./get-product.utility";
 
 export async function getSettings(): Promise<Settings> {
   const settings = await BackofficeService.getSettings({
     fields: [
       "*",
+      "carrousel_products.products_id.colors.colors_id.*",
       "carrousel_products.products_id.*",
-      "carrousel_products.products_id.images.directus_files_id.*",
+      "carrousel_products.products_id.images.*",
     ] as any
   });
   if (!settings) return emptySettings;
-
-  console.log(settings.carrousel_products);
 
   return {
     businessTitle: settings.business_title,
@@ -22,7 +22,7 @@ export async function getSettings(): Promise<Settings> {
     phone: settings.phone,
     email: settings?.email,
     logoId: settings?.logo,
-    carrouselProducts: [],
+    carrouselProducts: settings.carrousel_products?.flatMap(product => normalizeProduct(product.products_id)) ?? [],
   };
 }
 

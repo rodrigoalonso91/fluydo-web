@@ -21,11 +21,7 @@ export async function getProduct(id: string): Promise<Product | null> {
 
   if (!products || products.length === 0) return null;
 
-  const product = products[0];
-
-  console.log(normalizeProduct(product))
-
-  return normalizeProduct(product);
+  return normalizeProduct(products[0]);
 }
 
 export function normalizeProduct(product: ProductEntity): Product {
@@ -36,7 +32,7 @@ export function normalizeProduct(product: ProductEntity): Product {
     description: product.description,
     sku: product.sku,
     images: normalizeProductImages(product),
-    colors: normalizeProductColors(product),
+    colors: product.colors ? normalizeProductColors(product) : [],
   }
 }
 

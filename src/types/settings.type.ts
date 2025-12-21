@@ -1,5 +1,5 @@
 import type { Product, ProductEntity } from "./product.type";
-import type { SettingsProductJunctionEntity } from "./settings-product-juntion.type";
+import type { SettingsProductJunctionEntity } from "./settings-product-junction.type";
 
 export interface SettingEntity {
   id: string;
