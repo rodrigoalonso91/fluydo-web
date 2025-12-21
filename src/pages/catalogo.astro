@@ -33,8 +33,12 @@ const products = await getProducts();
       <div class="flex flex-wrap items-center gap-3 text-sm text-gray-600">
         <span class="font-medium">Ordenar por:</span>
         <select id="order-by" class="rounded border border-gray-300 bg-white px-2.5 py-1 text-sm shadow-sm focus:border-gray-400 focus:outline-none">
-          <option>Precio: menor a mayor</option>
-          <option>Precio: mayor a menor</option>
+          <option value="price-asc">Precio: menor a mayor</option>
+          <option value="price-desc">Precio: mayor a menor</option>
+          <option value="name-asc">Alfabético: A-Z</option>
+          <option value="name-desc">Alfabético: Z-A</option>
+          <option value="sku-asc">SKU: menor a mayor</option>
+          <option value="sku-desc">SKU: mayor a menor</option>
         </select>
       </div>
     </header>
@@ -90,9 +94,15 @@ const products = await getProducts();
         </aside>
 
         <section class="space-y-4">
-          <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div id="product-grid" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {products.filter(product => !!product).map((product) => (
-              <a class="contents" href={`/product/${product.id}`}>
+              <a
+                class="contents"
+                href={`/product/${product.id}`}
+                data-product-name={product.name}
+                data-product-price={product.price}
+                data-product-sku={product.sku}
+              >
                 <ProductCard product={product} />
               </a>
             ))}
@@ -101,4 +111,73 @@ const products = await getProducts();
       </div>
     </If>
   </main>
+
+  <script>
+    const orderBySelect = document.querySelector("#order-by");
+    const productGrid = document.querySelector("#product-grid");
+
+    if (orderBySelect && productGrid) {
+      const items = Array.from(productGrid.querySelectorAll("a.contents"));
+
+      const compareStrings = (a, b, direction = "asc") => {
+        const result = a.localeCompare(b, "es", { sensitivity: "base" });
+        return direction === "asc" ? result : -result;
+      };
+
+      const getSortValue = (item, key) => item.dataset[key] ?? "";
+
+      const sortItems = (value) => {
+        const sorted = [...items].sort((itemA, itemB) => {
+          switch (value) {
+            case "price-desc":
+              return (
+                Number(getSortValue(itemB, "productPrice")) -
+                Number(getSortValue(itemA, "productPrice"))
+              );
+            case "name-asc":
+              return compareStrings(
+                getSortValue(itemA, "productName"),
+                getSortValue(itemB, "productName"),
+                "asc"
+              );
+            case "name-desc":
+              return compareStrings(
+                getSortValue(itemA, "productName"),
+                getSortValue(itemB, "productName"),
+                "desc"
+              );
+            case "sku-asc":
+              return compareStrings(
+                getSortValue(itemA, "productSku"),
+                getSortValue(itemB, "productSku"),
+                "asc"
+              );
+            case "sku-desc":
+              return compareStrings(
+                getSortValue(itemA, "productSku"),
+                getSortValue(itemB, "productSku"),
+                "desc"
+              );
+            case "price-asc":
+            default:
+              return (
+                Number(getSortValue(itemA, "productPrice")) -
+                Number(getSortValue(itemB, "productPrice"))
+              );
+          }
+        });
+
+        productGrid.replaceChildren(...sorted);
+      };
+
+      sortItems(orderBySelect.value || "price-asc");
+
+      orderBySelect.addEventListener("change", (event) => {
+        const target = event.target;
+        if (target instanceof HTMLSelectElement) {
+          sortItems(target.value);
+        }
+      });
+    }
+  </script>
 </Layout>
