@@ -51,6 +51,6 @@ const phone = settings?.phone ? normalizeArgentinaPhone(settings?.phone) : "";
 		<Navbar />
     <slot />
 		<WhatsAppFloatingButton phone={phone} />
-		<Footer />
+		<Footer settings={settings} />
   </body>
 </html>
