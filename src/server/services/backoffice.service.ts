@@ -1,4 +1,4 @@
-import type { ColorEntity, ProductEntity, PurchaseConditionEntity, SettingEntity } from "@/types";
+import type { ColorEntity, ProductEntity, PurchaseConditionEntity, SettingEntity, SettingsProductJunctionEntity } from "@/types";
 import { createDirectus, isDirectusError, readItem, readItems, rest, staticToken, type Query } from "@directus/sdk";
 import { getSecret } from "astro:env/server";
 
@@ -12,6 +12,7 @@ if (!backofficeToken || !backofficeUrl) {
 
 interface DirectusSchema {
   settings: SettingEntity[];
+  settings_products: SettingsProductJunctionEntity[];
   purchase_conditions: PurchaseConditionEntity[];
   products: ProductEntity[];
   colors: ColorEntity[];

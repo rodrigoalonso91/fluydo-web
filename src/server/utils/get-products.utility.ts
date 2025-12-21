@@ -1,5 +1,6 @@
-import type { Product } from "@/types";
+import type { Product, ProductEntity } from "@/types";
 import { BackofficeService } from "../services";
+import { normalizeProduct } from "./get-product.utility";
 
 export async function getProducts(): Promise<Product[]> {
   const products = await BackofficeService.getProducts({
@@ -16,7 +17,11 @@ export async function getProducts(): Promise<Product[]> {
   });
   if (!products) return [];
 
-  const productsWithColors = products.map(product => {
+  return products.map(product => normalizeProduct(product));
+}
+
+export function toProducts(products: ProductEntity[]) {
+  return products.map(product => {
 
     const colors = product.colors?.map(color => {
       if (color.colors_id.status !== 'published') return null;
@@ -32,8 +37,4 @@ export async function getProducts(): Promise<Product[]> {
       colors: colors || []
     }
   });
-  return productsWithColors;
 }
-
-
-  

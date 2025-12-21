@@ -1,3 +1,6 @@
+import type { Product, ProductEntity } from "./product.type";
+import type { SettingsProductJunctionEntity } from "./settings-product-juntion.type";
+
 export interface SettingEntity {
   id: string;
   business_title: string;
@@ -10,6 +13,7 @@ export interface SettingEntity {
   phone: string;
   email: string;
   logo: string;
+  carrousel_products: SettingsProductJunctionEntity[];
 }
 
 export interface Settings {
@@ -21,4 +25,5 @@ export interface Settings {
   phone: string;
   email: string;
   logoId: string;
+  carrouselProducts: Product[];
 }

@@ -3,23 +3,6 @@ import type { Product } from "@/types";
 // import RenderIf from './RenderIf.astro';
 import ColorOptions from "./ColorOptions.astro";
 
-// const product = {
-//   id: "prod-001",
-//   title: "Sony WH-1000XM5 Noise Canceling",
-//   description: "Sumérgete en el sonido con la cancelación de ruido líder en la industria y un diseño ultraligero.",
-//   price: 349.00,
-//   originalPrice: 419.99,
-//   currency: "$",
-//   image: "https://images.unsplash.com/photo-1618366712010-f4ae9c647dcb?q=80&w=1000&auto=format&fit=crop",
-//   badge: "Oferta",
-//   colors: [
-//     { name: "Midnight Black", hex: "#1a1a1a", twClass: "bg-neutral-900" },
-//     { name: "Silver", hex: "#e0e0e0", twClass: "bg-gray-200" },
-//     { name: "Navy Blue", hex: "#1e3a8a", twClass: "bg-blue-900" }
-//   ],
-//   rating: 4.8
-// };
-
 interface Props {
   product: Product;
 }
@@ -42,7 +25,7 @@ const discount = Math.round(
     </RenderIf> -->
 
     <img
-      src={`/api/image/${product.images[0].directus_files_id}`}
+      src={`/api/image/${product.images[0]}`}
       alt={`Imagen de ${product.name}`}
       class="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
       loading="lazy"

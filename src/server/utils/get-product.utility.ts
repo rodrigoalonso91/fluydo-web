@@ -1,4 +1,4 @@
-import type { Product } from "@/types";
+import type { Product, ProductEntity } from "@/types";
 import { BackofficeService } from "../services";
 
 export async function getProduct(id: string): Promise<Product | null> {
@@ -23,6 +23,34 @@ export async function getProduct(id: string): Promise<Product | null> {
 
   const product = products[0];
 
+  console.log(normalizeProduct(product))
+
+  return normalizeProduct(product);
+}
+
+export function normalizeProduct(product: ProductEntity): Product {
+  return {
+    id: product.id,
+    name: product.name,
+    price: product.price,
+    description: product.description,
+    sku: product.sku,
+    images: normalizeProductImages(product),
+    colors: normalizeProductColors(product),
+  }
+}
+
+export function normalizeProductImages(product: ProductEntity) {
+  if (!product.images) return [];
+
+  const images = product.images.slice()
+    .map(img => img.directus_files_id) ?? []
+  ;
+
+  return images;
+}
+
+export function normalizeProductColors(product: ProductEntity) {
   const colors = product.colors
     ?.map((color) => {
       if (color.colors_id.status !== "published") return null;
@@ -33,10 +61,8 @@ export async function getProduct(id: string): Promise<Product | null> {
         code: color.colors_id.code
       };
     })
-    .filter((color) => color !== null);
+    .filter((color) => color !== null)
+  ;
 
-  return {
-    ...product,
-    colors: colors || []
-  };
+  return colors ?? [];
 }

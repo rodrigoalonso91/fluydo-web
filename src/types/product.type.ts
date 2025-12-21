@@ -11,7 +11,7 @@ export interface ProductEntity {
   name: string;
   price: number;
   description: string;
-  images: ProductImage[];
+  images: Record<string, any>[];
   colors: Array<{ colors_id: ColorEntity }>;
   sku: string;
 }
@@ -21,13 +21,7 @@ export interface Product {
   name: string;
   price: number;
   description: string;
-  images: ProductImage[];
+  images: string[];
   colors: Color[];
   sku: string;
-}
-
-export interface ProductImage {
-  id: number;
-  products_id: string;
-  directus_files_id: number;
 }
