@@ -1,4 +1,6 @@
+import type { Category } from "./categories.type";
 import type { Color, ColorEntity } from "./color.type";
+import type { ProductsCategoriesJunctionEntity } from "./products-categories-junction.type";
 
 export interface ProductEntity {
   id: string;
@@ -11,10 +13,11 @@ export interface ProductEntity {
   name: string;
   price: number;
   description: string;
-  images: Record<string, any>[];
-  colors: Array<{ colors_id: ColorEntity }>;
+  images: Record<string, any>[] | null;
+  colors: Array<{ colors_id: ColorEntity }> | null;
   sku: string;
   tags: string[];
+  categories: ProductsCategoriesJunctionEntity[] | null;
 }
 
 export interface Product {
@@ -26,4 +29,5 @@ export interface Product {
   colors: Color[];
   sku: string;
   tags: string[];
+  categories: Category[];
 }

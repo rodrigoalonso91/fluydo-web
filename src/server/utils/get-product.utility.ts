@@ -20,7 +20,6 @@ export async function getProduct(id: string): Promise<Product | null> {
   });
 
   if (!products || products.length === 0) return null;
-
   return normalizeProduct(products[0]);
 }
 
@@ -33,17 +32,20 @@ export function normalizeProduct(product: ProductEntity): Product {
     sku: product.sku,
     tags: product.tags,
     images: normalizeProductImages(product),
-    colors: product.colors ? normalizeProductColors(product) : [],
+    colors: normalizeProductColors(product),
+    categories: normalizeProductCategories(product),
   }
+}
+
+export function normalizeProductCategories(product: ProductEntity) {
+  if (!product.categories) return [];
+  const categories = product.categories.slice().map(cat => cat.categories_id) ?? [];
+  return categories;
 }
 
 export function normalizeProductImages(product: ProductEntity) {
   if (!product.images) return [];
-
-  const images = product.images.slice()
-    .map(img => img.directus_files_id) ?? []
-  ;
-
+  const images = product.images.slice().map(img => img.directus_files_id) ?? [];
   return images;
 }
 
@@ -51,7 +53,6 @@ export function normalizeProductColors(product: ProductEntity) {
   const colors = product.colors
     ?.map((color) => {
       if (color.colors_id.status !== "published") return null;
-
       return {
         id: color.colors_id.id,
         name: color.colors_id.name,

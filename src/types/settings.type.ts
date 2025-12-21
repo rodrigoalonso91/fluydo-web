@@ -1,4 +1,4 @@
-import type { Product, ProductEntity } from "./product.type";
+import type { Product } from "./product.type";
 import type { SettingsProductJunctionEntity } from "./settings-product-junction.type";
 
 export interface SettingEntity {
