@@ -114,7 +114,7 @@ const products = await getProducts();
 
   <script>
 
-    const orderBySelect = document.getElementById("order-by");
+    const orderBySelect = document.getElementById("order-by") as HTMLSelectElement;
     const productGrid = document.querySelector("#product-grid");
 
     if (orderBySelect && productGrid) {
@@ -171,7 +171,7 @@ const products = await getProducts();
         productGrid.replaceChildren(...sorted);
       };
 
-      sortItems((orderBySelect as HTMLOptionElement).value || "price-asc");
+      sortItems(orderBySelect.value || "price-asc");
 
       orderBySelect.addEventListener("change", (event) => {
         const target = event.target;
