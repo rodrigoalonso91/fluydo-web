@@ -32,8 +32,7 @@ const products = await getProducts();
 
       <div class="flex flex-wrap items-center gap-3 text-sm text-gray-600">
         <span class="font-medium">Ordenar por:</span>
-        <select class="rounded border border-gray-300 bg-white px-2.5 py-1 text-sm shadow-sm focus:border-gray-400 focus:outline-none">
-          <option>Relevancia</option>
+        <select id="order-by" class="rounded border border-gray-300 bg-white px-2.5 py-1 text-sm shadow-sm focus:border-gray-400 focus:outline-none">
           <option>Precio: menor a mayor</option>
           <option>Precio: mayor a menor</option>
         </select>
