@@ -1,6 +1,11 @@
 ---
-const phoneNumber = "5491112345678";
-const whatsappUrl = `https://wa.me/${phoneNumber}`;
+
+interface Props {
+  phone: string;
+}
+
+const { phone } = Astro.props;
+const whatsappUrl = `https://wa.me/${phone}`;
 ---
 
 <a
