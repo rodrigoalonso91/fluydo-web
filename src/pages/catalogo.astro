@@ -1,14 +1,18 @@
 ---
 import Layout from "@/layouts/Layout.astro";
-import { getProducts } from "@/server/utils";
+import { getProducts, getSettings } from "@/server/utils";
 import NoAvaliableProducts from "@/components/NoAvaliableProducts.astro";
 import If from "@/components/If.astro";
 import ProductCard from "@/components/ProductCard.astro";
+import OrderBySelect from "@/components/OrderBySelect.astro"
 
-const products = await getProducts();
+const [products, settings] = await Promise.all([ getProducts(), getSettings() ]);
+
+const categories = Array.from(new Set(products.flatMap(product => product.categories).filter(category => category.status === "published")));
+console.log(categories);
 ---
 
-<Layout>
+<Layout settings={settings}>
   <main class="mx-auto max-w-6xl px-4 py-6 lg:py-10">
 
     <div class="mb-4 text-sm text-gray-500">
@@ -29,69 +33,13 @@ const products = await getProducts();
         </p>
       </div>
 
-      <div class="flex flex-wrap items-center gap-3 text-sm text-gray-600">
-        <span class="font-medium">Ordenar por:</span>
-        <select id="order-by" class="rounded border border-gray-300 bg-white px-2.5 py-1 text-sm shadow-sm focus:border-gray-400 focus:outline-none">
-          <option value="price-asc">Precio: menor a mayor</option>
-          <option value="price-desc">Precio: mayor a menor</option>
-          <option value="name-asc">Alfabético: A-Z</option>
-          <option value="name-desc">Alfabético: Z-A</option>
-          <option value="sku-asc">SKU: menor a mayor</option>
-          <option value="sku-desc">SKU: mayor a menor</option>
-        </select>
-      </div>
+      <OrderBySelect />
     </header>
 
     <If condition={products.length === 0}>
       <NoAvaliableProducts slot="then" />
 
       <div slot="else" class="grid gap-8 lg:grid-cols-[260px,1fr]">
-        <aside class="space-y-6 border-gray-200 lg:border-r lg:pr-6">
-          
-          <!-- <section class="space-y-3">
-            <h2 class="text-sm font-semibold uppercase tracking-wide text-gray-700">
-              Categorías
-            </h2>
-            <div class="space-y-1 text-sm text-gray-600">
-              <button class="block w-full text-left hover:text-gray-900">Ver todo</button>
-              <button class="block w-full text-left hover:text-gray-900">Carteras</button>
-              <button class="block w-full text-left hover:text-gray-900">Mochilas</button>
-              <button class="block w-full text-left hover:text-gray-900">Billeteras</button>
-            </div>
-          </section> -->
-
-          <!-- <section class="space-y-3">
-            <h2 class="text-sm font-semibold uppercase tracking-wide text-gray-700">
-              Rango de precio
-            </h2>
-            <div class="flex items-center gap-2 text-sm text-gray-600">
-              <input
-                type="number"
-                placeholder="$ Mín"
-                class="w-full rounded border border-gray-300 px-2 py-1 text-sm focus:border-gray-400 focus:outline-none"
-              />
-              <span class="text-xs text-gray-500">a</span>
-              <input
-                type="number"
-                placeholder="$ Máx"
-                class="w-full rounded border border-gray-300 px-2 py-1 text-sm focus:border-gray-400 focus:outline-none"
-              />
-            </div>
-          </section> -->
-
-          <!-- <section class="space-y-3">
-            <h2 class="text-sm font-semibold uppercase tracking-wide text-gray-700">
-              Colores
-            </h2>
-            <div class="flex flex-wrap gap-2">
-              <button class="h-7 w-7 rounded-full border border-gray-300 bg-black" aria-label="Negro" />
-              <button class="h-7 w-7 rounded-full border border-gray-300 bg-brown-700" aria-label="Marrón" />
-              <button class="h-7 w-7 rounded-full border border-gray-300 bg-red-700" aria-label="Rojo" />
-              <button class="h-7 w-7 rounded-full border border-gray-300 bg-gray-300" aria-label="Gris" />
-            </div>
-          </section> -->
-        </aside>
-
         <section class="space-y-4">
           <div id="product-grid" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {products.filter(product => !!product).map((product) => (
@@ -112,7 +60,6 @@ const products = await getProducts();
   </main>
 
   <script>
-
     const orderBySelect = document.getElementById("order-by") as HTMLSelectElement;
     const productGrid = document.querySelector("#product-grid");
 

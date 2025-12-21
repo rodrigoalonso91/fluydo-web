@@ -13,6 +13,8 @@ export async function getProducts(): Promise<Product[]> {
       "*",
       "images.*",
       "colors.colors_id.*",
+      "categories.*",
+      "categories.categories_id.*",
     ] as any
   });
   if (!products) return [];
