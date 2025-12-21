@@ -113,20 +113,21 @@ const products = await getProducts();
   </main>
 
   <script>
-    const orderBySelect = document.querySelector("#order-by");
+
+    const orderBySelect = document.getElementById("order-by");
     const productGrid = document.querySelector("#product-grid");
 
     if (orderBySelect && productGrid) {
-      const items = Array.from(productGrid.querySelectorAll("a.contents"));
+      const items: HTMLAnchorElement[] = Array.from(productGrid.querySelectorAll("a.contents"));
 
-      const compareStrings = (a, b, direction = "asc") => {
+      const compareStrings = (a: string, b: string, direction = "asc") => {
         const result = a.localeCompare(b, "es", { sensitivity: "base" });
         return direction === "asc" ? result : -result;
       };
 
-      const getSortValue = (item, key) => item.dataset[key] ?? "";
+      const getSortValue = (item: HTMLAnchorElement, key: string) => item.dataset[key] ?? "";
 
-      const sortItems = (value) => {
+      const sortItems = (value: string) => {
         const sorted = [...items].sort((itemA, itemB) => {
           switch (value) {
             case "price-desc":
@@ -170,7 +171,7 @@ const products = await getProducts();
         productGrid.replaceChildren(...sorted);
       };
 
-      sortItems(orderBySelect.value || "price-asc");
+      sortItems((orderBySelect as HTMLOptionElement).value || "price-asc");
 
       orderBySelect.addEventListener("change", (event) => {
         const target = event.target;
