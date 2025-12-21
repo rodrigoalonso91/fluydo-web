@@ -14,6 +14,7 @@ export interface ProductEntity {
   images: Record<string, any>[];
   colors: Array<{ colors_id: ColorEntity }>;
   sku: string;
+  tags: string[];
 }
 
 export interface Product {
@@ -24,4 +25,5 @@ export interface Product {
   images: string[];
   colors: Color[];
   sku: string;
+  tags: string[];
 }

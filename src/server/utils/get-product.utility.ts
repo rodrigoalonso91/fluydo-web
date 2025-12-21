@@ -31,6 +31,7 @@ export function normalizeProduct(product: ProductEntity): Product {
     price: product.price,
     description: product.description,
     sku: product.sku,
+    tags: product.tags,
     images: normalizeProductImages(product),
     colors: product.colors ? normalizeProductColors(product) : [],
   }
