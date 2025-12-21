@@ -7,11 +7,13 @@ import HistorySection from '../components/HistorySection.astro';
 import { getSettings } from '@/server/utils';
 
 const settings = await getSettings();
+
+const carrouselImgs = settings.carrouselProducts.flatMap(product => product.images)
 ---
 
 <Layout settings={settings}>
   <main>
-    <Hero businessTitle={settings.businessTitle} businessPresentation={settings.businessPresentation} />
+    <Hero businessTitle={settings.businessTitle} businessPresentation={settings.businessPresentation} carrouselImages={carrouselImgs} />
     <AboutSection aboutUs={settings.aboutUs} />
     <PurchaseConditions />
     <HistorySection />
