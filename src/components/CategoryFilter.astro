@@ -1,0 +1,26 @@
+---
+import type { Category } from '@/types';
+
+interface Props {
+	categories: Category[];
+}
+
+const { categories } = Astro.props;
+---
+
+<div id="category-filter" class="space-y-4">
+	<h3 class="text-lg font-semibold text-gray-800 border-b border-gray-200 pb-2">Categorías</h3>
+	<div class="flex flex-wrap gap-2">
+		{
+			categories.map(category => (
+				<button
+					type="button"
+					data-category-id={category.id}
+					class="category-filter-button px-3 py-1.5 text-sm font-medium text-gray-700 bg-gray-100 rounded-full hover:bg-gray-200 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+				>
+					{category.name}
+				</button>
+			))
+		}
+	</div>
+</div>

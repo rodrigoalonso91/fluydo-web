@@ -1,130 +1,177 @@
 ---
-import Layout from "@/layouts/Layout.astro";
-import { getProducts, getSettings } from "@/server/utils";
-import NoAvaliableProducts from "@/components/NoAvaliableProducts.astro";
-import If from "@/components/If.astro";
-import ProductCard from "@/components/ProductCard.astro";
-import OrderBySelect from "@/components/OrderBySelect.astro"
+import Layout from '@/layouts/Layout.astro';
+import { getProducts, getSettings } from '@/server/utils';
+import NoAvaliableProducts from '@/components/NoAvaliableProducts.astro';
+import If from '@/components/If.astro';
+import ProductCard from '@/components/ProductCard.astro';
+import OrderBySelect from '@/components/OrderBySelect.astro';
+import CategoryFilter from '@/components/CategoryFilter.astro';
 
-const [products, settings] = await Promise.all([ getProducts(), getSettings() ]);
+const [products, settings] = await Promise.all([getProducts(), getSettings()]);
 
-const categories = Array.from(new Set(products.flatMap(product => product.categories).filter(category => category.status === "published")));
-console.log(categories);
+const categories = Array.from(
+	new Set(products.flatMap(product => product.categories).filter(category => category.status === 'published'))
+);
 ---
 
 <Layout settings={settings}>
-  <main class="mx-auto max-w-6xl px-4 py-6 lg:py-10">
+	<main class="mx-auto max-w-6xl px-4 py-6 lg:py-10">
+		<div class="mb-4 text-sm text-gray-500">
+			<nav class="flex flex-wrap items-center gap-1">
+				<a href="/" class="hover:text-gray-800">Inicio</a>
+				<span>/</span>
+				<span class="font-medium text-gray-800">Catálogo</span>
+			</nav>
+		</div>
 
-    <div class="mb-4 text-sm text-gray-500">
-      <nav class="flex flex-wrap items-center gap-1">
-        <a href="/" class="hover:text-gray-800">Inicio</a>
-        <span>/</span>
-        <span class="font-medium text-gray-800">Catálogo</span>
-      </nav>
-    </div>
+		<header class="mb-6 flex flex-col justify-between gap-4 border-b border-gray-200 pb-4 md:flex-row md:items-end">
+			<div>
+				<h1 class="text-2xl font-semibold tracking-tight text-gray-900 md:text-3xl">Productos</h1>
+				<p class="mt-1 text-sm text-gray-500">
+					<span id="product-count">{products.length}</span> productos encontrados
+				</p>
+			</div>
 
-    <header class="mb-6 flex flex-col justify-between gap-4 border-b border-gray-200 pb-4 md:flex-row md:items-end">
-      <div>
-        <h1 class="text-2xl font-semibold tracking-tight text-gray-900 md:text-3xl">
-          Productos
-        </h1>
-        <p class="mt-1 text-sm text-gray-500">
-          {products.length} productos encontrados
-        </p>
-      </div>
+			<OrderBySelect />
+		</header>
 
-      <OrderBySelect />
-    </header>
+		<If condition={products.length === 0}>
+			<NoAvaliableProducts slot="then" />
 
-    <If condition={products.length === 0}>
-      <NoAvaliableProducts slot="then" />
+			<div slot="else" class="grid gap-8 lg:grid-cols-[260px,1fr]">
+				<aside class="space-y-6">
+					<CategoryFilter categories={categories} />
+				</aside>
 
-      <div slot="else" class="grid gap-8 lg:grid-cols-[260px,1fr]">
-        <section class="space-y-4">
-          <div id="product-grid" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {products.filter(product => !!product).map((product) => (
-              <a
-                class="contents"
-                href={`/product/${product.id}`}
-                data-product-name={product.name}
-                data-product-price={product.price}
-                data-product-sku={product.sku}
-              >
-                <ProductCard product={product} />
-              </a>
-            ))}
-          </div>
-        </section>
-      </div>
-    </If>
-  </main>
+				<section class="space-y-4">
+					<div id="product-grid" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+						{
+							products
+								.filter(product => !!product)
+								.map(product => (
+									<a
+										class="contents product-item"
+										href={`/product/${product.id}`}
+										data-product-name={product.name}
+										data-product-price={product.price}
+										data-product-sku={product.sku}
+										data-categories={product.categories.map(c => c.id).join(',')}
+									>
+										<ProductCard product={product} />
+									</a>
+								))
+						}
+					</div>
+				</section>
+			</div>
+		</If>
+	</main>
 
-  <script>
-    const orderBySelect = document.getElementById("order-by") as HTMLSelectElement;
-    const productGrid = document.querySelector("#product-grid");
+	<style>
+		.category-filter-button.selected {
+			background-color: #4f46e5; /* indigo-600 */
+			color: white;
+		}
+	</style>
 
-    if (orderBySelect && productGrid) {
-      const items: HTMLAnchorElement[] = Array.from(productGrid.querySelectorAll("a.contents"));
+	<script>
+		// --- CATEGORY FILTER LOGIC ---
+		const categoryContainer = document.getElementById('category-filter');
+		const productItems = document.querySelectorAll('.product-item') as NodeListOf<HTMLElement>;
+		const productCountEl = document.getElementById('product-count');
 
-      const compareStrings = (a: string, b: string, direction = "asc") => {
-        const result = a.localeCompare(b, "es", { sensitivity: "base" });
-        return direction === "asc" ? result : -result;
-      };
+		if (categoryContainer && productItems.length > 0) {
+			const selectedCategories = new Set<string>();
 
-      const getSortValue = (item: HTMLAnchorElement, key: string) => item.dataset[key] ?? "";
+			const updateProductVisibility = () => {
+				let visibleProducts = 0;
+				productItems.forEach(item => {
+					const productCategories = item.dataset.categories?.split(',') ?? [];
 
-      const sortItems = (value: string) => {
-        const sorted = [...items].sort((itemA, itemB) => {
-          switch (value) {
-            case "price-desc":
-              return (
-                Number(getSortValue(itemB, "productPrice")) -
-                Number(getSortValue(itemA, "productPrice"))
-              );
-            case "name-asc":
-              return compareStrings(
-                getSortValue(itemA, "productName"),
-                getSortValue(itemB, "productName"),
-                "asc"
-              );
-            case "name-desc":
-              return compareStrings(
-                getSortValue(itemA, "productName"),
-                getSortValue(itemB, "productName"),
-                "desc"
-              );
-            case "sku-asc":
-              return compareStrings(
-                getSortValue(itemA, "productSku"),
-                getSortValue(itemB, "productSku"),
-                "asc"
-              );
-            case "sku-desc":
-              return compareStrings(
-                getSortValue(itemA, "productSku"),
-                getSortValue(itemB, "productSku"),
-                "desc"
-              );
-            case "price-asc":
-            default:
-              return (
-                Number(getSortValue(itemA, "productPrice")) -
-                Number(getSortValue(itemB, "productPrice"))
-              );
-          }
-        });
+					if (selectedCategories.size === 0) {
+						item.style.display = 'contents';
+						visibleProducts++;
+						return;
+					}
 
-        productGrid.replaceChildren(...sorted);
-      };
+					const isVisible = productCategories.some(catId => selectedCategories.has(catId));
+					item.style.display = isVisible ? 'contents' : 'none';
 
-      sortItems(orderBySelect.value || "price-asc");
+					if (isVisible) {
+						visibleProducts++;
+					}
+				});
 
-      orderBySelect.addEventListener("change", (event) => {
-        const target = event.target;
-        if (target instanceof HTMLSelectElement) {
-          sortItems(target.value);
-        }
-      });
-    }
-  </script>
+				if (productCountEl) {
+					productCountEl.textContent = String(visibleProducts);
+				}
+			};
+
+			categoryContainer.addEventListener('click', event => {
+				const target = event.target as HTMLElement;
+				if (!target.matches('.category-filter-button')) return;
+
+				const categoryId = target.dataset.categoryId;
+				if (!categoryId) return;
+
+				target.classList.toggle('selected');
+
+				if (selectedCategories.has(categoryId)) {
+					selectedCategories.delete(categoryId);
+				} else {
+					selectedCategories.add(categoryId);
+				}
+
+				updateProductVisibility();
+			});
+		}
+
+		// --- SORTING LOGIC ---
+		const orderBySelect = document.getElementById('order-by') as HTMLSelectElement;
+		const productGrid = document.querySelector('#product-grid');
+
+		if (orderBySelect && productGrid) {
+			const getItems = () => Array.from(productGrid.querySelectorAll('a.contents.product-item')) as HTMLAnchorElement[];
+
+			const compareStrings = (a: string, b: string, direction = 'asc') => {
+				const result = a.localeCompare(b, 'es', { sensitivity: 'base' });
+				return direction === 'asc' ? result : -result;
+			};
+
+			const getSortValue = (item: HTMLAnchorElement, key: string) => item.dataset[key] ?? '';
+
+			const sortItems = (value: string) => {
+				const items = getItems();
+				const sorted = [...items].sort((itemA, itemB) => {
+					switch (value) {
+						case 'price-desc':
+							return Number(getSortValue(itemB, 'productPrice')) - Number(getSortValue(itemA, 'productPrice'));
+						case 'name-asc':
+							return compareStrings(getSortValue(itemA, 'productName'), getSortValue(itemB, 'productName'), 'asc');
+						case 'name-desc':
+							return compareStrings(getSortValue(itemA, 'productName'), getSortValue(itemB, 'productName'), 'desc');
+						case 'sku-asc':
+							return compareStrings(getSortValue(itemA, 'productSku'), getSortValue(itemB, 'productSku'), 'asc');
+						case 'sku-desc':
+							return compareStrings(getSortValue(itemA, 'productSku'), getSortValue(itemB, 'productSku'), 'desc');
+						case 'price-asc':
+						default:
+							return Number(getSortValue(itemA, 'productPrice')) - Number(getSortValue(itemB, 'productPrice'));
+					}
+				});
+
+				productGrid.replaceChildren(...sorted);
+			};
+
+			// Initial sort
+			sortItems(orderBySelect.value || 'price-asc');
+
+			orderBySelect.addEventListener('change', event => {
+				const target = event.target;
+				if (target instanceof HTMLSelectElement) {
+					sortItems(target.value);
+				}
+			});
+		}
+	</script>
 </Layout>
