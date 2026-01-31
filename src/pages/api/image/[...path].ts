@@ -1,11 +1,13 @@
 import type { APIRoute } from 'astro';
 import { getSecret } from 'astro:env/server';
 
+const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
 export const GET: APIRoute = async ({ params }) => {
   const backofficeUrl = getSecret('DIRECTUS_BO_URL');
   const path = params.path;
 
-  if (!backofficeUrl || !path) {
+  if (!backofficeUrl || !path || !UUID_REGEX.test(path)) {
     return new Response('Not found', { status: 404 });
   }
 
