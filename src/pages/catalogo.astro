@@ -1,7 +1,7 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import { getProducts, getSettings } from '@/server/utils';
-import NoAvaliableProducts from '@/components/NoAvaliableProducts.astro';
+import NoAvailableProducts from '@/components/NoAvailableProducts.astro';
 import If from '@/components/If.astro';
 import ProductCard from '@/components/ProductCard.astro';
 import OrderBySelect from '@/components/OrderBySelect.astro';
@@ -36,7 +36,7 @@ const categories = Array.from(
 		</header>
 
 		<If condition={products.length === 0}>
-			<NoAvaliableProducts slot="then" />
+			<NoAvailableProducts slot="then" />
 
 			<div slot="else" class="grid gap-8 lg:grid-cols-[260px,1fr]">
 				<aside class="space-y-6">
