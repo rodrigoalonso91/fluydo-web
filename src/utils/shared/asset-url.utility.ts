@@ -6,7 +6,6 @@
 export function getAssetUrl(assetId: string): string {
 	const backofficeUrl = process.env.DIRECTUS_BO_URL;
 
-	if (!backofficeUrl) throw new Error('DIRECTUS_BO_URL environment variable is not defined');
-
+	if (!backofficeUrl) return `/api/assets/${assetId}`;
 	return `${backofficeUrl}/assets/${assetId}`;
 }

@@ -10,7 +10,7 @@ interface Props {
 export function CategoryFilter({ categories, onSelectCategory }: Props) {
 	return (
 		<div id="category-filter" className="space-y-4">
-			<h3 className="text-lg font-semibold text-gray-800 border-b border-gray-200 pb-2">Categorías</h3>
+			<h3 className="text-lg font-semibold text-white-800 border-b border-gray-200 pb-2">Categorías</h3>
 			<div className="flex flex-wrap gap-2">
 				<Each
 					of={categories}
