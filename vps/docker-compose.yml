@@ -1,0 +1,51 @@
+services:
+  db:
+    image: postgres:16
+    restart: unless-stopped
+    container_name: fluydo-db
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - fluydo-network
+      
+  directus:
+    image: directus/directus:latest
+    container_name: fluydo-backoffice
+    restart: unless-stopped
+    depends_on:
+      - db
+    ports:
+      - "${DIRECTUS_PORT}:8055"
+    environment:
+      DB_CLIENT: pg
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_DATABASE: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      KEY: ${DIRECTUS_KEY}
+      SECRET: ${DIRECTUS_SECRET}
+      ADMIN_EMAIL: ${DIRECTUS_ADMIN_EMAIL}
+      ADMIN_PASSWORD: ${DIRECTUS_ADMIN_PASSWORD}
+      PUBLIC_URL: "http://31.97.91.146:8056"
+      CORS_ENABLED: "true"
+      CORS_ORIGIN: "https://fluydo.netlify.app,http://31.97.91.146:8056"
+      CORS_CREDENTIALS: "true"
+    volumes:
+      - directus_uploads:/directus/uploads
+      - directus_extensions:/directus/extensions
+    networks:
+      - fluydo-network
+
+networks:
+  fluydo-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  directus_uploads:
+  directus_extensions:
