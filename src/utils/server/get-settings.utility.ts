@@ -1,6 +1,7 @@
-import type { Settings } from '@/types';
+import type { SettingEntity, Settings } from '@/types';
+import type { QueryFields } from '@directus/sdk';
 import { normalizeProduct } from './get-product.utility';
-import { BackofficeService } from './backoffice.service';
+import { BackofficeService, type DirectusSchema } from './backoffice.service';
 
 export async function getSettings(): Promise<Settings> {
 	const settings = await BackofficeService.getSettings({
@@ -9,7 +10,7 @@ export async function getSettings(): Promise<Settings> {
 			'carrousel_products.products_id.colors.colors_id.*',
 			'carrousel_products.products_id.*',
 			'carrousel_products.products_id.images.*'
-		] as any
+		] as QueryFields<DirectusSchema, SettingEntity>
 	});
 	if (!settings) return emptySettings;
 

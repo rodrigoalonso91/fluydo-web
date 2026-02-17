@@ -7,10 +7,20 @@ export interface CategoryEntity {
   user_updated: string | null;
   date_updated: string | null;
   name: string;
+  slug: string;
+  badge_text: string | null;
+  parent: string | null;
+  menu_label: string | null;
+  menu_group: string | null;
+  children: CategoryEntity[] | null;
 }
 
 export interface Category {
   id: string;
   name: string;
-  status: string;
+  slug: string;
+  badgeText: string | null;
+  menuLabel: string | null;
+  menuGroup: string | null;
+  parent: string | null;
 }

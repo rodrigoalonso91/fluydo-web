@@ -17,7 +17,7 @@ if (!backofficeToken || !backofficeUrl) {
 	throw new Error('DIRECTUS_ADMIN_APIKEY or DIRECTUS_BO_URL is not defined');
 }
 
-interface DirectusSchema {
+export interface DirectusSchema {
 	settings: SettingEntity[];
 	settings_products: SettingsProductJunctionEntity[];
 	purchase_conditions: PurchaseConditionEntity[];
@@ -60,6 +60,19 @@ export class BackofficeService {
 		try {
 			const products = await client.request(readItems('products', query));
 			return products;
+		} catch (error) {
+			if (isDirectusError(error)) {
+				console.error(error.message);
+			} else {
+				console.error(error);
+			}
+		}
+	}
+
+	static async getCategories(query?: Query<DirectusSchema, CategoryEntity>) {
+		try {
+			const categories = await client.request(readItems('categories', query));
+			return categories;
 		} catch (error) {
 			if (isDirectusError(error)) {
 				console.error(error.message);

@@ -1,14 +1,15 @@
 import { CategoryFilter, OrderBySelect, ProductCard } from '@/components/ui';
-import { getProducts } from '@/utils/server';
+import { getCategories, getProducts } from '@/utils/server';
 import Link from 'next/link';
 import { Else, If, Then } from 'syntax-sugar';
 
 export default async function CatalogoPage() {
+	const categoriesRaw = await getCategories();
+	console.log({ categoriesRaw });
+
 	const products = await getProducts();
 
-	const categories = Array.from(
-		new Set(products.flatMap(product => product.categories).filter(category => category.status === 'published'))
-	);
+	const categories = Array.from(new Set(products.flatMap(product => product.categories)));
 
 	return (
 		<section className="mx-auto max-w-6xl px-4 py-6 lg:py-10">

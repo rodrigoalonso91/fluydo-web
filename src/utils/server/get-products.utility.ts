@@ -1,5 +1,6 @@
-import { Product } from '@/types';
-import { BackofficeService } from './backoffice.service';
+import type { Product, ProductEntity } from '@/types';
+import type { QueryFields } from '@directus/sdk';
+import { BackofficeService, type DirectusSchema } from './backoffice.service';
 import { normalizeProduct } from './get-product.utility';
 
 export async function getProducts(): Promise<Product[]> {
@@ -9,7 +10,10 @@ export async function getProducts(): Promise<Product[]> {
 				_eq: 'published'
 			}
 		},
-		fields: ['*', 'images.*', 'colors.colors_id.*', 'categories.*', 'categories.categories_id.*'] as any
+		fields: ['*', 'images.*', 'colors.colors_id.*', 'categories.*', 'categories.categories_id.*'] as QueryFields<
+			DirectusSchema,
+			ProductEntity
+		>
 	});
 	if (!products) return [];
 

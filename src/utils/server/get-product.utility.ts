@@ -1,5 +1,7 @@
 import type { Product, ProductEntity } from '@/types';
-import { BackofficeService } from './backoffice.service';
+import type { QueryFields } from '@directus/sdk';
+import { BackofficeService, type DirectusSchema } from './backoffice.service';
+import { normalizeCategory } from './get-categories.utility';
 
 export async function getProduct(id: string): Promise<Product | null> {
 	const products = await BackofficeService.getProducts({
@@ -11,7 +13,7 @@ export async function getProduct(id: string): Promise<Product | null> {
 				_eq: 'published'
 			}
 		},
-		fields: ['*', 'images.*', 'colors.colors_id.*'] as any,
+		fields: ['*', 'images.*', 'colors.colors_id.*'] as QueryFields<DirectusSchema, ProductEntity>,
 		limit: 1
 	});
 
@@ -35,8 +37,7 @@ export function normalizeProduct(product: ProductEntity): Product {
 
 export function normalizeProductCategories(product: ProductEntity) {
 	if (!product.categories) return [];
-	const categories = product.categories.slice().map(cat => cat.categories_id) ?? [];
-	return categories;
+	return product.categories.filter(cat => cat.categories_id).map(cat => normalizeCategory(cat.categories_id));
 }
 
 export function normalizeProductImages(product: ProductEntity) {

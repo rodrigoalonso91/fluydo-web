@@ -1,4 +1,5 @@
 export * from './backoffice.service';
+export * from './get-categories.utility';
 export * from './get-logo.utility';
 export * from './get-product.utility';
 export * from './get-products.utility';
