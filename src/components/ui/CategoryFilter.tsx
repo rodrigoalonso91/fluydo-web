@@ -1,4 +1,5 @@
 'use client';
+import { Button } from '@/components/ui/button';
 import { Category } from '@/types';
 import { Each } from 'syntax-sugar';
 
@@ -16,14 +17,16 @@ export function CategoryFilter({ categories, onSelectCategory }: Props) {
 					of={categories}
 					setAsKey={c => c.id}
 					renderAs={category => (
-						<button
+						<Button
 							type="button"
+							variant="secondary"
+							size="sm"
 							data-category-id={category.id}
 							onClick={() => onSelectCategory?.(category)}
-							className="category-filter-button px-3 py-1.5 text-sm font-medium text-gray-700 bg-gray-100 rounded-full hover:bg-gray-200 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+							className="category-filter-button rounded-full"
 						>
 							{category.name}
-						</button>
+						</Button>
 					)}
 				/>
 			</div>

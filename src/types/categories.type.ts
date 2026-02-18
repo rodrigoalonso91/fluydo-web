@@ -24,3 +24,15 @@ export interface Category {
   menuGroup: string | null;
   parent: string | null;
 }
+
+export interface CategoryNode {
+  id: string;
+  label: string;
+  slug: string;
+  children?: CategoryNode[];
+}
+
+export interface MenuGroup {
+  name: string;
+  categories: CategoryNode[];
+}

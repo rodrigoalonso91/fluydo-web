@@ -1,4 +1,4 @@
-export * from './HistorySection';
+export * from './FaqSection';
 export * from './Logo';
 export * from './PrimaryLinkButton';
 export * from './PurchaseConditions';

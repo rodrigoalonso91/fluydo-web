@@ -1,4 +1,4 @@
-import { HistorySection, PurchaseConditions } from '@/components/server-component';
+import { FaqSection, PurchaseConditions } from '@/components/server-component';
 import { AboutSection } from '@/components/ui/AboutSection';
 import Hero from '@/components/ui/Hero';
 import { getSettings } from '@/utils/server';
@@ -19,7 +19,7 @@ export default async function Home() {
 			/>
 			<AboutSection aboutUs={settings.aboutUs} phoneNumber={normalizeArgentinaPhone(settings.phone ?? '')} />
 			<PurchaseConditions />
-			<HistorySection />
+			<FaqSection />
 		</main>
 	);
 }

@@ -1,6 +1,7 @@
 import type {
 	CategoryEntity,
 	ColorEntity,
+	FaqEntity,
 	ProductEntity,
 	ProductsCategoriesJunctionEntity,
 	PurchaseConditionEntity,
@@ -25,6 +26,7 @@ export interface DirectusSchema {
 	categories: CategoryEntity[];
 	products_categories: ProductsCategoriesJunctionEntity[];
 	colors: ColorEntity[];
+	faqs: FaqEntity[];
 }
 
 const client = createDirectus<DirectusSchema>(backofficeUrl).with(rest()).with(staticToken(backofficeToken));
@@ -73,6 +75,18 @@ export class BackofficeService {
 		try {
 			const categories = await client.request(readItems('categories', query));
 			return categories;
+		} catch (error) {
+			if (isDirectusError(error)) {
+				console.error(error.message);
+			} else {
+				console.error(error);
+			}
+		}
+	}
+
+	static async getFaqs(query?: Query<DirectusSchema, FaqEntity>) {
+		try {
+			return await client.request(readItems('faqs', query));
 		} catch (error) {
 			if (isDirectusError(error)) {
 				console.error(error.message);
